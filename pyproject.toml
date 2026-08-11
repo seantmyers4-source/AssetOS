@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "assetos-mob"
+version = "0.1.0"
+description = "AssetOS Minimum Operational Baseline controlled development kernel"
+requires-python = ">=3.11"
+readme = "README.md"
+license = { text = "Proprietary / controlled AssetOS engineering candidate" }
+authors = [{ name = "AssetOS Engineering & Automation" }]
+
+[project.scripts]
+assetos-mob = "assetos_mob.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
