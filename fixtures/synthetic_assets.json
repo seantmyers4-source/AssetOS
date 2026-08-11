@@ -1,0 +1,85 @@
+{
+  "control_reference": "AOS-HO-00001",
+  "fixture_scope": "synthetic-development-only",
+  "assets": [
+    {
+      "request_id": "fixture-physical-no-serial",
+      "intended_asset_key": "synthetic-tool-without-serial",
+      "preferred_name": "Synthetic cordless drill without serial",
+      "description": "Physical asset fixture without a serial number and without receipt evidence.",
+      "taxonomy_ref": "tax:physical:tools",
+      "information_class": "Personal",
+      "evidence": [
+        {
+          "evidence_ref": "ev-syn-drill-overview",
+          "evidence_type": "overview_photo",
+          "drive_locator": "gdrive://synthetic/originals/drill-overview.jpg",
+          "information_class": "Personal",
+          "continuity_state": "available",
+          "acceptance_state": "associated",
+          "completeness_state": "partial",
+          "provenance": {"source": "synthetic fixture", "contains_real_user_data": false}
+        }
+      ]
+    },
+    {
+      "request_id": "fixture-confidential-vehicle",
+      "intended_asset_key": "synthetic-vehicle-conflicting-external-ids",
+      "preferred_name": "Synthetic vehicle with conflicting VIN evidence",
+      "description": "Physical asset fixture using confidential evidence and conflicting external identifier behavior.",
+      "taxonomy_ref": "tax:physical:vehicle",
+      "information_class": "Confidential",
+      "evidence": [
+        {
+          "evidence_ref": "ev-syn-vehicle-vin-a",
+          "evidence_type": "external_identifier_photo",
+          "drive_locator": "gdrive://synthetic/originals/vehicle-vin-a.jpg",
+          "information_class": "Confidential",
+          "continuity_state": "available",
+          "acceptance_state": "reviewed",
+          "completeness_state": "sufficient",
+          "provenance": {"source": "synthetic fixture", "contains_real_user_data": false}
+        },
+        {
+          "evidence_ref": "ev-syn-vehicle-vin-b-disputed",
+          "evidence_type": "external_identifier_photo",
+          "drive_locator": "gdrive://synthetic/originals/vehicle-vin-b.jpg",
+          "information_class": "Confidential",
+          "continuity_state": "available",
+          "acceptance_state": "disputed",
+          "completeness_state": "partial",
+          "provenance": {"source": "synthetic fixture", "contains_real_user_data": false}
+        }
+      ]
+    },
+    {
+      "request_id": "fixture-restricted-no-secret",
+      "intended_asset_key": "synthetic-restricted-fixture-no-secrets",
+      "preferred_name": "Synthetic restricted recovery reference",
+      "description": "Restricted information-class fixture containing no actual secret, credential, token, or sensitive user value.",
+      "taxonomy_ref": "tax:intangible:document",
+      "information_class": "Restricted",
+      "evidence": [
+        {
+          "evidence_ref": "ev-syn-restricted-broken",
+          "evidence_type": "recovery_reference",
+          "drive_locator": "gdrive://synthetic/missing/recovery-reference.txt",
+          "information_class": "Restricted",
+          "continuity_state": "broken",
+          "acceptance_state": "unavailable",
+          "completeness_state": "preservation_unavailable",
+          "provenance": {"source": "synthetic fixture", "contains_real_user_data": false, "contains_secret": false}
+        }
+      ]
+    },
+    {
+      "request_id": "fixture-intangible-public",
+      "intended_asset_key": "synthetic-public-warranty",
+      "preferred_name": "Synthetic public warranty document",
+      "description": "Non-physical/intangible asset fixture with public information classification.",
+      "taxonomy_ref": "tax:intangible:warranty",
+      "information_class": "Public",
+      "evidence": []
+    }
+  ]
+}
