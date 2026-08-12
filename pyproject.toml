@@ -7,6 +7,7 @@ name = "assetos-mob"
 version = "0.1.0"
 description = "AssetOS Minimum Operational Baseline controlled development kernel"
 requires-python = ">=3.11"
+dependencies = ["cryptography>=46,<47"]
 readme = "README.md"
 license = { text = "Proprietary / controlled AssetOS engineering candidate" }
 authors = [{ name = "AssetOS Engineering & Automation" }]

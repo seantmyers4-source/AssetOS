@@ -135,7 +135,9 @@ CREATE TABLE evidence_references (
   asset_uuid TEXT NOT NULL REFERENCES assets(asset_uuid),
   evidence_type TEXT NOT NULL,
   drive_locator TEXT,
-  original_or_derivative TEXT NOT NULL CHECK (original_or_derivative IN ('original', 'derivative')),
+  original_or_derivative TEXT NOT NULL CHECK (
+    original_or_derivative IN ('original', 'derivative', 'working_copy', 'redacted', 'annotated', 'export')
+  ),
   information_class TEXT NOT NULL REFERENCES information_classes(information_class),
   provenance_json TEXT NOT NULL CHECK (json_valid(provenance_json)),
   capture_time TEXT,
@@ -161,6 +163,19 @@ CREATE TABLE evidence_locator_history (
   prior_drive_locator TEXT,
   new_drive_locator TEXT,
   continuity_state TEXT NOT NULL,
+  actor TEXT NOT NULL,
+  authority TEXT NOT NULL,
+  reason TEXT NOT NULL,
+  recorded_time TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE evidence_state_history (
+  evidence_state_history_id INTEGER PRIMARY KEY,
+  evidence_ref TEXT NOT NULL REFERENCES evidence_references(evidence_ref),
+  prior_original_or_derivative TEXT,
+  new_original_or_derivative TEXT NOT NULL CHECK (
+    new_original_or_derivative IN ('original', 'derivative', 'working_copy', 'redacted', 'annotated', 'export')
+  ),
   actor TEXT NOT NULL,
   authority TEXT NOT NULL,
   reason TEXT NOT NULL,

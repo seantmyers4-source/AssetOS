@@ -67,6 +67,7 @@ Registry-side evidence references support:
 - Restricted information is default-deny for AI/OCR/automation.
 - Secrets must not be stored in ordinary Registry fields, evidence metadata, audit logs, exports, tests, or application payloads.
 - Minimum disclosure applies to search, export, logs, and controlled derivatives.
+- Controlled export evaluates requester authority, allowed information classes, and protected field sets before disclosing descriptions, payloads, external identifiers, or evidence locators.
 
 ## Failure Behavior
 
@@ -96,3 +97,16 @@ Future production integration must audit:
 - backup and restore effects on evidence references.
 
 Audit logs are governed information and must not become a second uncontrolled Registry.
+
+## Development-Tested Registry-Side Behavior
+
+The MOB correction candidate implements synthetic, Registry-side behavior for:
+
+- failed-closed authorization on evidence access and controlled export;
+- locator repair through `repair_evidence_locator`, preserving evidence-reference identity and prior locator history;
+- explicit original, derivative, working-copy, redacted, annotated, and export evidence states;
+- bounded evidence-reference search by stable `evidence_ref`;
+- minimum-disclosure export suppression for protected evidence locators;
+- attributable audit events for export, backup, restore, publication, and denied access.
+
+No real Google Drive connection, Drive metadata read, Drive content read, Drive write, permission change, rename, move, or migration is authorized or implemented by this correction.

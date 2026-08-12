@@ -49,6 +49,11 @@ class ActorContext:
         if permission not in self.permissions:
             raise AuthorizationError(f"{self.actor} lacks {permission}")
 
+    def can(self, permission: str) -> bool:
+        if permission not in ALL_PERMISSIONS:
+            raise AuthorizationError(f"unknown permission: {permission}")
+        return permission in self.permissions
+
 
 ENGINEERING_TEST_ACTOR = ActorContext(
     actor="assetos-engineering-test",

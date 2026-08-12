@@ -35,11 +35,28 @@ This is a controlled development/test implementation. It creates no production R
 - Minimum Taxonomy reference storage: Asset to Class to Category with optional Subcategory/Type unassigned.
 - Four approved information classes.
 - Evidence references with Drive locator, provenance, continuity, acceptance, and completeness states.
-- Bounded exact lookup and limited search.
-- Controlled export with integrity hash.
-- SQLite-consistent encrypted backup using `sqlite3.Connection.backup` and OpenSSL AES-256-CBC with PBKDF2.
+- Application-mediated validation and publication gates.
+- Bounded exact lookup and limited search across preferred name/description, Taxonomy references, external identifiers, and evidence-reference identity.
+- Controlled minimum-disclosure export with integrity hash and protected-field suppression.
+- SQLite-consistent encrypted backup using `sqlite3.Connection.backup`, PBKDF2-HMAC-SHA256, and Fernet authenticated encryption.
 - Restore with backup integrity verification.
-- Attributable audit events.
+- Attributable audit events for denied access, reservation, assignment, publication, correction, evidence access, export, backup, and restore.
+
+## Cryptographic Implementation Note
+
+The correction candidate removes OpenSSL CLI passphrase transport. Backup encryption is performed in process through `cryptography 46.x`:
+
+- mechanism: Python `cryptography.fernet.Fernet`;
+- encryption/integrity: Fernet authenticated encryption, implemented by the library as AES-128-CBC plus HMAC-SHA256;
+- KDF: PBKDF2-HMAC-SHA256;
+- iterations: `600000`;
+- salt: 16 random bytes per backup, stored as non-secret envelope metadata;
+- passphrase input: in-process Python function argument, never sent through subprocess command-line arguments;
+- subprocess behavior: no encryption subprocess is used;
+- failure handling: invalid token, malformed envelope, or integrity mismatch raises a controlled `AssetOSError`;
+- output verification: restore authenticates the encrypted token and verifies the SQLite snapshot SHA-256 from the manifest;
+- restore behavior: restored database receives a governed restore audit event;
+- leakage controls: passphrase is not written to audit payloads, stdout/stderr, fixtures, repository files, or the backup envelope.
 
 ## Current-State Projection
 

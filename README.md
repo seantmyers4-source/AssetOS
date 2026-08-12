@@ -18,13 +18,14 @@ The implementation is intentionally bounded:
 - `src/assetos_mob/` — Python standard-library implementation.
 - `migrations/001_mob.sql` — SQLite schema, constraints, WAL setup assumptions, and current-state views.
 - `fixtures/synthetic_assets.json` — representative synthetic fixture set.
-- `tests/` — producer tests and ARIR-013 acceptance coverage.
+- `tests/` and `qa_adversarial_mob_tests.py` — producer baseline and bounded release-blocking correction coverage.
 - `docs/` — implementation summary, ARIR-013 matrix, ARIR-014 Registry to Drive contract, assumptions, and unresolved defects.
 
 ## Quick Verification
 
 ```bash
 python -m unittest discover -s tests
+python qa_adversarial_mob_tests.py -v
 ```
 
 ## Production Boundary

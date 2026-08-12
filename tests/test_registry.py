@@ -195,6 +195,7 @@ class RegistryTests(unittest.TestCase):
             evidence_type="receipt",
             drive_locator="gdrive://synthetic/missing",
             information_class="Confidential",
+            original_or_derivative="original",
             continuity_state="broken",
             acceptance_state="associated",
             completeness_state="partial",
