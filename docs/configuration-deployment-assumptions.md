@@ -6,9 +6,24 @@ Control reference: `AOS-HO-00001`
 
 - Python 3.11 or newer.
 - SQLite available through Python standard library.
-- OpenSSL command-line utility available for encrypted backup and restore tests.
+- Python `cryptography` dependency available as declared in `pyproject.toml`.
 - Test data is synthetic.
 - Local files are development artifacts, not production Registry files.
+
+## Bounded Backup Cryptography Assumptions
+
+The controlled non-operational MOB v0.1 release candidate uses the tested in-process Python backup mechanism:
+
+- Python `cryptography`;
+- Fernet authenticated encryption;
+- PBKDF2-HMAC-SHA256;
+- random 16-byte salt per encrypted backup envelope;
+- 600,000 PBKDF2 iterations;
+- in-process passphrase handling.
+
+OpenSSL command-line encryption is not the active MOB backup implementation.
+
+Release acceptance of this bounded cryptographic implementation does not constitute production approval of secret handling, backup storage, host protection, recovery procedures, or operational key/passphrase management. Those matters remain subject to later competent Security & Privacy and Architecture & Standards approval before production admission or activation.
 
 ## SQLite Host Protection Assumptions
 

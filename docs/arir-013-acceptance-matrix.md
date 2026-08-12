@@ -2,7 +2,9 @@
 
 Control reference: `AOS-HO-00001`
 
-This matrix maps the approved ARIR-013 implementation-measurement requirements into reproducible producer tests. It is not independent QA certification.
+Release representation: **Closed with activation conditions**.
+
+This matrix maps the approved ARIR-013 implementation-measurement requirements into reproducible producer tests and independent QA readback evidence for the controlled non-production MOB v0.1 release. This does not state that production admission or activation testing is complete.
 
 | Area | Requirement | Producer evidence |
 |---|---|---|
@@ -62,4 +64,4 @@ This matrix maps the approved ARIR-013 implementation-measurement requirements i
 
 ## Remaining QA Work
 
-Independent QA should inspect the schema, run the tests in a clean environment, rerun or expand the adversarial fixtures, and verify that no implementation path can silently convert generated/reserved/assigned development IDs into production identifiers.
+Independent QA has verified QA-RR-001 through QA-RR-009 for the controlled non-operational release candidate. Production admission testing remains subject to later activation-readiness controls, including production host hardening and real Google Drive continuity/reconciliation.

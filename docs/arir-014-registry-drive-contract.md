@@ -2,7 +2,7 @@
 
 Control reference: `AOS-HO-00001`
 
-State: Controlled Engineering deliverable / requires Architecture, Registry, Documentation, Security, and QA treatment before production use.
+State: Verified with activation conditions for controlled non-production MOB v0.1 release / requires Architecture, Registry, Documentation, Security, and QA treatment before production-connected use.
 
 ## Purpose
 
@@ -109,4 +109,6 @@ The MOB correction candidate implements synthetic, Registry-side behavior for:
 - minimum-disclosure export suppression for protected evidence locators;
 - attributable audit events for export, backup, restore, publication, and denied access.
 
-No real Google Drive connection, Drive metadata read, Drive content read, Drive write, permission change, rename, move, or migration is authorized or implemented by this correction.
+No real Google Drive connection, Drive metadata read, Drive content read, Drive write, permission change, rename, move, or migration is authorized or implemented by this controlled non-operational release.
+
+ARIR-014 is represented for release as **Verified with activation conditions**. The Registry to Google Drive contract is adequate for the controlled non-production release package. Production-connected Drive use remains prohibited pending activation-readiness verification.

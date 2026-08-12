@@ -1,8 +1,10 @@
-# AssetOS Minimum Operational Baseline Engineering Candidate
+# AssetOS Minimum Operational Baseline v0.1
 
 Control reference: `AOS-HO-00001`
 
-This repository contains a controlled, non-production implementation candidate for the approved **AssetOS Minimum Operational Baseline Implementation Specification v0.1**.
+Release state: **Controlled / Non-production / Non-operational**.
+
+This repository contains the controlled non-operational release package for the approved **AssetOS Minimum Operational Baseline Implementation Specification v0.1**.
 
 The implementation is intentionally bounded:
 
@@ -11,7 +13,7 @@ The implementation is intentionally bounded:
 - no production Asset intake;
 - no production permanent Asset-ID issuance;
 - no production Google Drive restructuring or permission changes;
-- no RuntimeOS execution, release, deployment, or AssetOS activation.
+- no RuntimeOS execution, deployment, production admission, or AssetOS activation.
 
 ## Contents
 
@@ -19,7 +21,7 @@ The implementation is intentionally bounded:
 - `migrations/001_mob.sql` — SQLite schema, constraints, WAL setup assumptions, and current-state views.
 - `fixtures/synthetic_assets.json` — representative synthetic fixture set.
 - `tests/` and `qa_adversarial_mob_tests.py` — producer baseline and bounded release-blocking correction coverage.
-- `docs/` — implementation summary, ARIR-013 matrix, ARIR-014 Registry to Drive contract, assumptions, and unresolved defects.
+- `docs/` — implementation summary, release notes, ARIR-013 matrix, ARIR-014 Registry to Drive contract, assumptions, and unresolved defects.
 
 ## Quick Verification
 
@@ -39,4 +41,4 @@ assigned test ID != production canonical identity
 test Registry != production Registry
 ```
 
-The package is suitable for independent Engineering implementation QA, not release or production operation.
+The package is suitable for controlled non-production release readback, not production operation.
