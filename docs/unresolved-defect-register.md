@@ -31,7 +31,7 @@ Current release-packaging status:
 
 | Finding | Prior status | Correction commit | Documentation change | Readback evidence | Producer disposition | QA/Command Center status |
 |---|---|---|---|---|---|---|
-| QA-DOC-001 | Documentation-only stale crypto dependency statement | Pending release-package commit | Corrected `docs/configuration-deployment-assumptions.md` to identify Python `cryptography`, Fernet authenticated encryption, PBKDF2-HMAC-SHA256, random 16-byte salt, 600,000 iterations, and in-process passphrase handling | Direct documentation readback during release packaging | Corrected | Pending bounded readback |
+| QA-DOC-001 | Documentation-only stale crypto dependency statement | `d5c6a85680ce5b13753c3dd2adfb79f1ebfd3e40` | Corrected `docs/configuration-deployment-assumptions.md` to identify Python `cryptography`, Fernet authenticated encryption, PBKDF2-HMAC-SHA256, random 16-byte salt, 600,000 iterations, and in-process passphrase handling | Direct documentation readback during release packaging | Corrected | Pending bounded readback |
 
 ## Non-Blocking Limitations
 
