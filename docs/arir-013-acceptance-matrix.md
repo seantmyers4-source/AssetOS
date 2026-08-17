@@ -4,7 +4,7 @@ Control reference: `AOS-HO-00001`
 
 Release representation: **Closed with activation conditions**.
 
-This matrix maps the approved ARIR-013 implementation-measurement requirements into reproducible producer tests and independent QA readback evidence for the controlled non-production MOB v0.1 release. This does not state that production admission or activation testing is complete.
+This matrix maps the approved ARIR-013 implementation-measurement requirements into reproducible producer tests and independent QA readback evidence for the controlled non-production MOB v0.1.1 corrective release package. This does not state that production admission or activation testing is complete.
 
 | Area | Requirement | Producer evidence |
 |---|---|---|
@@ -67,8 +67,8 @@ This matrix maps the approved ARIR-013 implementation-measurement requirements i
 
 | Finding | Implementation surface | Test method | Expected result | Producer-observed result | Evidence location |
 |---|---|---|---|---|---|
-| DEP-INIT-001 | `assetos_mob.db` migration resolver and packaged `assetos_mob.migrations` resources | `python -m unittest discover -s tests -v` | Clean installed artifact discovers packaged `001_mob.sql`, records migration, seeds reference data, and does not depend on repository top-level `migrations` at runtime | Pass in producer environment | `tests/test_installed_artifact.py` |
+| DEP-INIT-001 | `assetos_mob.db` migration resolver and packaged `assetos_mob.migrations` resources | `python -m unittest discover -s tests -v` | Clean installed artifact discovers packaged `001_mob.sql`, records migration, seeds reference data, and does not depend on repository top-level `migrations` at runtime | Producer pass; independent installed-artifact QA verified candidate `82844ce60021033d47439e62cf8c4bc9f100c634` with evidence-custody condition | `tests/test_installed_artifact.py` |
 
 ## Remaining QA Work
 
-Independent QA has verified QA-RR-001 through QA-RR-009 for the controlled non-operational release candidate. DEP-INIT-001 is an Engineering correction candidate pending independent installed-artifact QA. Production admission testing remains subject to later activation-readiness controls, including production host hardening and real Google Drive continuity/reconciliation.
+Independent QA has verified QA-RR-001 through QA-RR-009 for the controlled non-operational release candidate. DEP-INIT-001 technical correction is independently verified; final lifecycle closure remains pending corrective release publication, clean Windows deployment verification, and applicable evidence-custody closure. Production admission testing remains subject to later activation-readiness controls, including production host hardening and real Google Drive continuity/reconciliation.

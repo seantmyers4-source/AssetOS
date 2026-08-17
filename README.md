@@ -1,10 +1,12 @@
-# AssetOS Minimum Operational Baseline v0.1
+# AssetOS Minimum Operational Baseline v0.1.1
 
 Control reference: `AOS-HO-00001`
 
 Release state: **Controlled / Non-production / Non-operational**.
 
-This repository contains the controlled non-operational release package for the approved **AssetOS Minimum Operational Baseline Implementation Specification v0.1**.
+This repository contains the controlled non-operational corrective release package for the approved **AssetOS Minimum Operational Baseline Implementation Specification v0.1**.
+
+Corrective release `mob-v0.1.1` incorporates the independently verified `DEP-INIT-001` installed migration-resource packaging correction. Historical release `mob-v0.1` remains immutable at `12c144e4580331a4e7642ddaa1a0f82899078e38`.
 
 The implementation is intentionally bounded:
 

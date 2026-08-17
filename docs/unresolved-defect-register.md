@@ -10,7 +10,9 @@ Current release-packaging status:
 
 - QA-RR-001 through QA-RR-009: closed by independent QA.
 - QA-DOC-001: corrected / pending bounded Command Center or QA documentation readback.
-- DEP-INIT-001: corrected by Engineering candidate / pending independent installed-artifact QA.
+- DEP-INIT-001: technical correction independently verified / release integration in progress / final lifecycle closure pending corrective release publication, clean Windows deployment verification, and applicable evidence-custody closure.
+- DEP-QA-001 through DEP-QA-004: resolved.
+- DEP-QA-005: open / evidence-custody condition.
 - QA-ACT-001: open / activation-blocking.
 - QA-ACT-002: open / activation-blocking.
 
@@ -38,7 +40,17 @@ Current release-packaging status:
 
 | Finding | Prior status | Correction surface | Implementation change | Test evidence | Producer disposition | QA/Command Center status |
 |---|---|---|---|---|---|---|
-| DEP-INIT-001 | Admission-readiness blocking / engineering correction required | `src/assetos_mob/db.py`, `src/assetos_mob/migrations/001_mob.sql`, `pyproject.toml` package data | Replaced repository-relative migration resolution with installed package resource discovery; packaged governed `001_mob.sql`; added installed-artifact initialization regression | `tests/test_installed_artifact.py::InstalledArtifactTests::test_installed_package_initializes_without_repository_migrations` | Correction candidate produced | Pending independent installed-artifact QA |
+| DEP-INIT-001 | Admission-readiness blocking / engineering correction required | `src/assetos_mob/db.py`, `src/assetos_mob/migrations/001_mob.sql`, `pyproject.toml` package data | Replaced repository-relative migration resolution with installed package resource discovery; packaged governed `001_mob.sql`; added installed-artifact initialization regression | Independent installed-artifact QA verified candidate `82844ce60021033d47439e62cf8c4bc9f100c634`; producer regression `tests/test_installed_artifact.py::InstalledArtifactTests::test_installed_package_initializes_without_repository_migrations` | Technical correction independently verified; v0.1.1 release integration in progress | Pending corrective release publication, clean Windows deployment verification, and evidence-custody closure |
+
+## Installed-Artifact QA Execution-Gate Findings
+
+| Finding | Status | Disposition |
+|---|---|---|
+| DEP-QA-001 | Resolved | Execution-gate issue resolved during independent installed-artifact QA campaign. |
+| DEP-QA-002 | Resolved | Execution-gate issue resolved during independent installed-artifact QA campaign. |
+| DEP-QA-003 | Resolved | Execution-gate issue resolved during independent installed-artifact QA campaign. |
+| DEP-QA-004 | Resolved | Execution-gate issue resolved during independent installed-artifact QA campaign. |
+| DEP-QA-005 | Open / evidence-custody condition | Evidence-custody condition remains open and does not close DEP-INIT-001 lifecycle by itself. |
 
 ## Non-Blocking Limitations
 

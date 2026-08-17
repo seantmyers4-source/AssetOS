@@ -44,9 +44,9 @@ This is a controlled development/test implementation. It creates no production R
 
 ## Installed Artifact Migration Resolution
 
-`DEP-INIT-001` identified that the `mob-v0.1` installed artifact resolved migrations through a repository-relative filesystem path that does not exist in a clean installed environment. The correction candidate resolves migrations through `importlib.resources` from `assetos_mob.migrations`, with `001_mob.sql` included as package data.
+`DEP-INIT-001` identified that the `mob-v0.1` installed artifact resolved migrations through a repository-relative filesystem path that does not exist in a clean installed environment. Corrective release `mob-v0.1.1` resolves migrations through `importlib.resources` from `assetos_mob.migrations`, with `001_mob.sql` included as package data.
 
-Producer regression coverage installs the package into a fresh virtual environment, executes initialization from an isolated runtime directory with no top-level repository `migrations` directory, verifies `schema_migrations` contains `001_mob`, and verifies reference data seeding completed.
+Producer regression coverage installs the package into a fresh virtual environment, executes initialization from an isolated runtime directory with no top-level repository `migrations` directory, verifies `schema_migrations` contains `001_mob`, and verifies reference data seeding completed. Independent installed-artifact QA verified correction candidate `82844ce60021033d47439e62cf8c4bc9f100c634` with evidence-custody condition.
 
 ## Cryptographic Implementation Note
 
