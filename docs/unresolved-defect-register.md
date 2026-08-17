@@ -10,6 +10,7 @@ Current release-packaging status:
 
 - QA-RR-001 through QA-RR-009: closed by independent QA.
 - QA-DOC-001: corrected / pending bounded Command Center or QA documentation readback.
+- DEP-INIT-001: corrected by Engineering candidate / pending independent installed-artifact QA.
 - QA-ACT-001: open / activation-blocking.
 - QA-ACT-002: open / activation-blocking.
 
@@ -32,6 +33,12 @@ Current release-packaging status:
 | Finding | Prior status | Correction commit | Documentation change | Readback evidence | Producer disposition | QA/Command Center status |
 |---|---|---|---|---|---|---|
 | QA-DOC-001 | Documentation-only stale crypto dependency statement | `d5c6a85680ce5b13753c3dd2adfb79f1ebfd3e40` | Corrected `docs/configuration-deployment-assumptions.md` to identify Python `cryptography`, Fernet authenticated encryption, PBKDF2-HMAC-SHA256, random 16-byte salt, 600,000 iterations, and in-process passphrase handling | Direct documentation readback during release packaging | Corrected | Pending bounded readback |
+
+## Admission-Readiness Blocking Findings
+
+| Finding | Prior status | Correction surface | Implementation change | Test evidence | Producer disposition | QA/Command Center status |
+|---|---|---|---|---|---|---|
+| DEP-INIT-001 | Admission-readiness blocking / engineering correction required | `src/assetos_mob/db.py`, `src/assetos_mob/migrations/001_mob.sql`, `pyproject.toml` package data | Replaced repository-relative migration resolution with installed package resource discovery; packaged governed `001_mob.sql`; added installed-artifact initialization regression | `tests/test_installed_artifact.py::InstalledArtifactTests::test_installed_package_initializes_without_repository_migrations` | Correction candidate produced | Pending independent installed-artifact QA |
 
 ## Non-Blocking Limitations
 

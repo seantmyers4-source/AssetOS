@@ -4,7 +4,7 @@ Control reference: `AOS-HO-00001`
 
 ## Review Result
 
-Engineering producer review: complete for controlled non-operational MOB v0.1 release packaging.
+Engineering producer review: complete for DEP-INIT-001 installed schema resource packaging correction candidate.
 
 ## Checks Performed
 
@@ -24,6 +24,10 @@ Engineering producer review: complete for controlled non-operational MOB v0.1 re
 - Defect register updated to reflect independent QA closure of QA-RR-001 through QA-RR-009, QA-DOC-001 corrected pending bounded readback, and activation blockers preserved.
 - QA-DOC-001 corrected without executable, schema, migration, dependency behavior, API, test-logic, or runtime semantic changes.
 - Release notes prepared for AssetOS Minimum Operational Baseline v0.1 with controlled / non-production / non-operational state.
+- DEP-INIT-001 corrected by replacing repository-relative migration discovery with packaged resource discovery through `importlib.resources`.
+- Governed `001_mob.sql` added as installed package data under `assetos_mob.migrations`.
+- Installed-artifact regression added to verify clean venv initialization from an isolated runtime directory with no repository top-level `migrations` directory.
+- Producer baseline now includes 22 tests because of the two DEP-INIT-001 regression tests.
 
 ## Activation Findings Preserved
 
@@ -36,4 +40,4 @@ This producer self-review does not authorize deployment, production admission, R
 
 📦 AssetOS Command Center
 
-for bounded release-publication readback.
+for independent installed-artifact QA routing and admission-readiness disposition.

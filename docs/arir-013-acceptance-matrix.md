@@ -18,6 +18,7 @@ This matrix maps the approved ARIR-013 implementation-measurement requirements i
 | Identity | Duplicate request detection | `test_duplicate_request_cannot_manufacture_second_asset` |
 | Identity | Valid but unissued ID distinction | `test_valid_but_unissued_is_distinct_from_invalid` |
 | Registry | Referential integrity | `migrations/001_mob.sql` foreign keys and fixture load tests |
+| Registry | Installed migration discovery | `tests/test_installed_artifact.py::InstalledArtifactTests::test_installed_package_initializes_without_repository_migrations` |
 | Registry | Append/supersede history | `test_append_supersede_preserves_history_and_current_view` |
 | Registry | Current-view derivation | `asset_records_current` view and lookup tests |
 | Registry | Interrupted or uncertain write behavior | `test_uncertain_commit_requires_reconciliation` |
@@ -62,6 +63,12 @@ This matrix maps the approved ARIR-013 implementation-measurement requirements i
 | QA-RR-008 | `repair_evidence_locator` and `evidence_locator_history` | `python qa_adversarial_mob_tests.py -v` | Repair preserves stable evidence identity, prior locator, actor, reason, time, and current locator | Pass | `qa_adversarial_mob_tests.py` |
 | QA-RR-009 | `add_evidence_reference`, `set_evidence_state`, `evidence_state_history` | `python qa_adversarial_mob_tests.py -v` | Evidence state is explicit; invalid states fail; state changes preserve history | Pass | `qa_adversarial_mob_tests.py` |
 
+## Admission-Readiness Correction Traceability
+
+| Finding | Implementation surface | Test method | Expected result | Producer-observed result | Evidence location |
+|---|---|---|---|---|---|
+| DEP-INIT-001 | `assetos_mob.db` migration resolver and packaged `assetos_mob.migrations` resources | `python -m unittest discover -s tests -v` | Clean installed artifact discovers packaged `001_mob.sql`, records migration, seeds reference data, and does not depend on repository top-level `migrations` at runtime | Pass in producer environment | `tests/test_installed_artifact.py` |
+
 ## Remaining QA Work
 
-Independent QA has verified QA-RR-001 through QA-RR-009 for the controlled non-operational release candidate. Production admission testing remains subject to later activation-readiness controls, including production host hardening and real Google Drive continuity/reconciliation.
+Independent QA has verified QA-RR-001 through QA-RR-009 for the controlled non-operational release candidate. DEP-INIT-001 is an Engineering correction candidate pending independent installed-artifact QA. Production admission testing remains subject to later activation-readiness controls, including production host hardening and real Google Drive continuity/reconciliation.

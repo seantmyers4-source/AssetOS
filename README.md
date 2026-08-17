@@ -18,7 +18,8 @@ The implementation is intentionally bounded:
 ## Contents
 
 - `src/assetos_mob/` — Python standard-library implementation.
-- `migrations/001_mob.sql` — SQLite schema, constraints, WAL setup assumptions, and current-state views.
+- `migrations/001_mob.sql` — governed source copy of the SQLite schema, constraints, WAL setup assumptions, and current-state views.
+- `src/assetos_mob/migrations/001_mob.sql` — packaged migration resource used by installed artifacts at runtime.
 - `fixtures/synthetic_assets.json` — representative synthetic fixture set.
 - `tests/` and `qa_adversarial_mob_tests.py` — producer baseline and bounded release-blocking correction coverage.
 - `docs/` — implementation summary, release notes, ARIR-013 matrix, ARIR-014 Registry to Drive contract, assumptions, and unresolved defects.

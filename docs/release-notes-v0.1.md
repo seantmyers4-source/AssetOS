@@ -97,3 +97,5 @@ Repository release package does not mean deployment.
 - Independent QA disposition: release readiness verified with conditions; QA-RR-001 through QA-RR-009 closed.
 - Documentation-only finding: QA-DOC-001, corrected in the controlled release-package documentation commit.
 - Controlled release authorization: AssetOS Minimum Operational Baseline v0.1, controlled / non-production / non-operational.
+- Post-tag admission-readiness finding: DEP-INIT-001 identified installed schema migration resource packaging/resolution defect in `mob-v0.1`.
+- DEP-INIT-001 correction candidate: packaged migration resource resolution prepared for independent installed-artifact QA; production admission remains unauthorized.

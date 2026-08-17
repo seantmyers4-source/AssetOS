@@ -16,7 +16,7 @@ This is a controlled development/test implementation. It creates no production R
 ## Runtime Shape
 
 - Python standard-library implementation under `src/assetos_mob`.
-- SQLite physical Registry kernel initialized from `migrations/001_mob.sql`.
+- SQLite physical Registry kernel initialized from the packaged `assetos_mob.migrations` resource copy of governed source migration `migrations/001_mob.sql`.
 - Application-mediated access through `AssetOSRegistry`; tests do not require direct user manipulation of SQLite.
 - WAL mode, foreign keys, full synchronous mode, and controlled schema migration setup.
 - Synthetic fixtures only.
@@ -41,6 +41,12 @@ This is a controlled development/test implementation. It creates no production R
 - SQLite-consistent encrypted backup using `sqlite3.Connection.backup`, PBKDF2-HMAC-SHA256, and Fernet authenticated encryption.
 - Restore with backup integrity verification.
 - Attributable audit events for denied access, reservation, assignment, publication, correction, evidence access, export, backup, and restore.
+
+## Installed Artifact Migration Resolution
+
+`DEP-INIT-001` identified that the `mob-v0.1` installed artifact resolved migrations through a repository-relative filesystem path that does not exist in a clean installed environment. The correction candidate resolves migrations through `importlib.resources` from `assetos_mob.migrations`, with `001_mob.sql` included as package data.
+
+Producer regression coverage installs the package into a fresh virtual environment, executes initialization from an isolated runtime directory with no top-level repository `migrations` directory, verifies `schema_migrations` contains `001_mob`, and verifies reference data seeding completed.
 
 ## Cryptographic Implementation Note
 
