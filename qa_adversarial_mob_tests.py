@@ -11,6 +11,10 @@ from assetos_mob.backup import encrypted_backup, restore_encrypted_backup
 from assetos_mob.errors import AuthorizationError, ConflictError, ValidationError
 from assetos_mob.export import controlled_export
 from assetos_mob.registry import AssetOSRegistry
+from tests.test_provider_locator_semantics import (
+    ProviderLocatorSemanticsTests as _ProviderLocatorSemanticsTests,
+    SyntheticV011MigrationTests as _SyntheticV011MigrationTests,
+)
 
 
 class MOBReleaseBlockingCorrections(unittest.TestCase):
@@ -286,6 +290,18 @@ class MOBReleaseBlockingCorrections(unittest.TestCase):
             "SELECT COUNT(*) AS c FROM evidence_state_history WHERE evidence_ref = 'ev-derivative'"
         ).fetchone()["c"]
         self.assertEqual(2, count)
+
+
+class AOSPROD001ProviderLocatorCorrections(_ProviderLocatorSemanticsTests):
+    """AOS-PROD-001 provider identity and canonical locator adversarial coverage."""
+
+
+class AOSPROD001SyntheticMigrationCorrections(_SyntheticV011MigrationTests):
+    """Synthetic v0.1.1 to v0.1.2 migration adversarial coverage."""
+
+
+del _ProviderLocatorSemanticsTests
+del _SyntheticV011MigrationTests
 
 
 if __name__ == "__main__":

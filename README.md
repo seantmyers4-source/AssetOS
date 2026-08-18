@@ -1,12 +1,14 @@
-# AssetOS Minimum Operational Baseline v0.1.1
+# AssetOS Minimum Operational Baseline v0.1.2
 
 Control reference: `AOS-HO-00001`
 
 Release state: **Controlled / Non-production / Non-operational**.
 
-This repository contains the controlled non-operational corrective release package for the approved **AssetOS Minimum Operational Baseline Implementation Specification v0.1**.
+This repository contains the controlled non-operational corrective candidate package for the approved **AssetOS Minimum Operational Baseline Implementation Specification v0.1**.
 
 Corrective release `mob-v0.1.1` incorporates the independently verified `DEP-INIT-001` installed migration-resource packaging correction. Historical release `mob-v0.1` remains immutable at `12c144e4580331a4e7642ddaa1a0f82899078e38`.
+
+Corrective candidate `mob-v0.1.2` addresses `AOS-PROD-001` by adding first-class provider identity and canonical evidence-locator semantics for provider-connected evidence references. It does not authorize production Registry migration or production record repair.
 
 The implementation is intentionally bounded:
 
@@ -21,6 +23,7 @@ The implementation is intentionally bounded:
 
 - `src/assetos_mob/` — Python standard-library implementation.
 - `migrations/001_mob.sql` — governed source copy of the SQLite schema, constraints, WAL setup assumptions, and current-state views.
+- `migrations/002_provider_locator_semantics.sql` — governed v0.1.2 provider identity and canonical locator schema extension.
 - `src/assetos_mob/migrations/001_mob.sql` — packaged migration resource used by installed artifacts at runtime.
 - `fixtures/synthetic_assets.json` — representative synthetic fixture set.
 - `tests/` and `qa_adversarial_mob_tests.py` — producer baseline and bounded release-blocking correction coverage.

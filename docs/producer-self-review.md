@@ -4,7 +4,7 @@ Control reference: `AOS-HO-00001`
 
 ## Review Result
 
-Engineering producer review: complete for AssetOS MOB v0.1.1 corrective release packaging.
+Engineering producer review: complete for AssetOS MOB v0.1.2 AOS-PROD-001 corrective candidate.
 
 ## Checks Performed
 
@@ -31,6 +31,14 @@ Engineering producer review: complete for AssetOS MOB v0.1.1 corrective release 
 - Independent installed-artifact QA verified correction candidate `82844ce60021033d47439e62cf8c4bc9f100c634` with evidence-custody condition.
 - Package version metadata updated from `0.1.0` to `0.1.1` for corrective distributable identity only; no executable source, migration content, schema, dependency behavior, test logic, Registry semantics, APIs, authorization, or cryptographic behavior changed after `82844ce60021033d47439e62cf8c4bc9f100c634`.
 - Corrective release notes prepared for AssetOS Minimum Operational Baseline v0.1.1 with controlled / non-production / non-operational state.
+- AOS-PROD-001 corrective candidate added first-class provider identity, canonical locator validation, provider identity reconciliation, no-op repair rejection, and locator-history annotation.
+- Synthetic v0.1.1 migration coverage verifies Asset ID, Asset UUID, evidence reference, and historical no-op locator events are preserved without using the production Registry as a fixture.
+- Provider identity and canonical locator data are suppressed in controlled export unless locator details are authorized under minimum-disclosure rules.
+- Package version metadata updated from `0.1.1` to `0.1.2` for corrective candidate identity.
+- Installed-artifact test harness corrected to build the candidate wheel before isolated runtime installation, then install the wheel offline with `--no-deps --no-index`; this preserves the packaged-migration assertion without relying on build backend packages inside the isolated runtime venv.
+- `CUSTODY-R2` documentation records supersession of prior unpublished transfer bundles after a publication-verification custody discrepancy; no provider-locator implementation, migration content, Registry semantics, production data, or release behavior changed for this custody note.
+- Producer baseline tests pass locally: `python -m unittest discover -s tests -v` runs 31 tests.
+- Expanded adversarial producer tests pass locally: `python qa_adversarial_mob_tests.py -v` runs 19 tests.
 
 ## Activation Findings Preserved
 
@@ -43,4 +51,4 @@ This producer self-review does not authorize deployment, production admission, R
 
 📦 AssetOS Command Center
 
-for bounded corrective release authorization and publication.
+for independent QA routing. Production Registry migration remains prohibited until separately authorized.

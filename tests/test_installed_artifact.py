@@ -22,7 +22,31 @@ class InstalledArtifactTests(unittest.TestCase):
             venv_path = tmp_path / "venv"
             run_path = tmp_path / "isolated-runtime"
             db_path = tmp_path / "installed.sqlite"
+            wheelhouse = tmp_path / "wheelhouse"
             run_path.mkdir()
+            wheelhouse.mkdir()
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "pip",
+                    "wheel",
+                    "--no-deps",
+                    "--no-index",
+                    "--no-build-isolation",
+                    "--wheel-dir",
+                    str(wheelhouse),
+                    str(ROOT),
+                ],
+                check=True,
+                cwd=tmp_path,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+            wheels = sorted(wheelhouse.glob("assetos_mob-*.whl"))
+            self.assertEqual(1, len(wheels))
 
             subprocess.run(
                 [sys.executable, "-m", "venv", "--system-site-packages", str(venv_path)],
@@ -42,8 +66,7 @@ class InstalledArtifactTests(unittest.TestCase):
                     "install",
                     "--no-deps",
                     "--no-index",
-                    "--no-build-isolation",
-                    str(ROOT),
+                    str(wheels[0]),
                 ],
                 check=True,
                 cwd=tmp_path,
@@ -93,7 +116,7 @@ print(json.dumps({{
             )
 
             observed = json.loads(result.stdout)
-            self.assertEqual(["001_mob"], observed["migrations"])
+            self.assertEqual(["001_mob", "002_provider_locator_semantics"], observed["migrations"])
             self.assertEqual(
                 ["Confidential", "Personal", "Public", "Restricted"],
                 observed["information_classes"],
@@ -101,10 +124,13 @@ print(json.dumps({{
             self.assertGreaterEqual(observed["taxonomy_count"], 1)
             self.assertFalse((run_path / "migrations").exists())
 
-    def test_packaged_migration_matches_governed_source_migration(self):
-        source = ROOT / "migrations" / "001_mob.sql"
-        packaged = ROOT / "src" / "assetos_mob" / "migrations" / "001_mob.sql"
-        self.assertEqual(source.read_text(encoding="utf-8"), packaged.read_text(encoding="utf-8"))
+    def test_packaged_migrations_match_governed_source_migrations(self):
+        source_dir = ROOT / "migrations"
+        packaged_dir = ROOT / "src" / "assetos_mob" / "migrations"
+        for source in sorted(source_dir.glob("*.sql")):
+            with self.subTest(migration=source.name):
+                packaged = packaged_dir / source.name
+                self.assertEqual(source.read_text(encoding="utf-8"), packaged.read_text(encoding="utf-8"))
 
 
 def _venv_python(venv_path: Path) -> Path:
