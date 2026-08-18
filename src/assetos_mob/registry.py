@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import re
 import sqlite3
 import uuid
 
@@ -13,6 +14,9 @@ from .errors import ConflictError, NotFoundError, UncertainCommitError, Validati
 from .identifiers import generate_candidate_asset_id, normalize_asset_id
 
 VALID_EVIDENCE_STATES = {"original", "derivative", "working_copy", "redacted", "annotated", "export"}
+VALID_PROVIDER_NAMESPACES = {"google_drive"}
+VALID_LOCATOR_ANNOTATIONS = {"no_op_repair_attempt", "not_canonical_locator_transition"}
+GOOGLE_DRIVE_OBJECT_ID = re.compile(r"^[A-Za-z0-9_-]+$")
 VALID_CONTINUITY_STATES = {
     "available",
     "unavailable",
@@ -347,6 +351,10 @@ class AssetOSRegistry:
         completeness_state: str,
         provenance: dict,
         actor: auth.ActorContext,
+        provider_namespace: str | None = None,
+        provider_object_id: str | None = None,
+        canonical_locator: str | None = None,
+        display_name: str | None = None,
     ) -> dict:
         self._require_permission(
             actor,
@@ -356,6 +364,11 @@ class AssetOSRegistry:
         )
         self._require_information_class(information_class)
         self._require_evidence_state(original_or_derivative)
+        self._validate_provider_identity(
+            provider_namespace=provider_namespace,
+            provider_object_id=provider_object_id,
+            canonical_locator=canonical_locator,
+        )
         if continuity_state not in VALID_CONTINUITY_STATES:
             raise ValidationError("invalid continuity_state")
         with self.conn:
@@ -365,8 +378,9 @@ class AssetOSRegistry:
                 INSERT INTO evidence_references(
                     evidence_ref, asset_uuid, evidence_type, drive_locator, original_or_derivative,
                     information_class, provenance_json, continuity_state, acceptance_state,
-                    completeness_state, actor, authority
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    completeness_state, actor, authority, provider_namespace, provider_object_id,
+                    canonical_locator, display_name
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     evidence_ref,
@@ -381,6 +395,10 @@ class AssetOSRegistry:
                     completeness_state,
                     actor.actor,
                     actor.authority,
+                    provider_namespace,
+                    provider_object_id,
+                    canonical_locator,
+                    display_name,
                 ),
             )
             self.conn.execute(
@@ -412,6 +430,8 @@ class AssetOSRegistry:
         continuity_state: str,
         reason: str,
         actor: auth.ActorContext,
+        provider_namespace: str | None = None,
+        provider_object_id: str | None = None,
     ) -> dict:
         self._require_permission(
             actor,
@@ -427,6 +447,14 @@ class AssetOSRegistry:
             ).fetchone()
             if not current:
                 raise NotFoundError("evidence reference not found")
+            if current["drive_locator"] == new_drive_locator:
+                raise ValidationError("no-op locator repair is not a canonical locator transition")
+            self._require_provider_reconciliation(
+                current,
+                new_drive_locator=new_drive_locator,
+                provider_namespace=provider_namespace,
+                provider_object_id=provider_object_id,
+            )
             self.conn.execute(
                 """
                 INSERT INTO evidence_locator_history(
@@ -444,10 +472,20 @@ class AssetOSRegistry:
                     reason,
                 ),
             )
-            self.conn.execute(
-                "UPDATE evidence_references SET drive_locator = ?, continuity_state = ? WHERE evidence_ref = ?",
-                (new_drive_locator, continuity_state, evidence_ref),
-            )
+            if current["provider_namespace"]:
+                self.conn.execute(
+                    """
+                    UPDATE evidence_references
+                    SET drive_locator = ?, canonical_locator = ?, continuity_state = ?
+                    WHERE evidence_ref = ?
+                    """,
+                    (new_drive_locator, new_drive_locator, continuity_state, evidence_ref),
+                )
+            else:
+                self.conn.execute(
+                    "UPDATE evidence_references SET drive_locator = ?, continuity_state = ? WHERE evidence_ref = ?",
+                    (new_drive_locator, continuity_state, evidence_ref),
+                )
             self._audit(
                 "evidence_reference_access",
                 actor,
@@ -457,6 +495,110 @@ class AssetOSRegistry:
         return dict(
             self.conn.execute(
                 "SELECT * FROM evidence_references WHERE evidence_ref = ?", (evidence_ref,)
+            ).fetchone()
+        )
+
+    def set_evidence_provider_identity(
+        self,
+        *,
+        evidence_ref: str,
+        provider_namespace: str,
+        provider_object_id: str,
+        canonical_locator: str,
+        display_name: str | None,
+        reason: str,
+        actor: auth.ActorContext,
+    ) -> dict:
+        self._require_permission(
+            actor,
+            auth.EVIDENCE_REFERENCE_ACCESS,
+            action="attempted_provider_identity_reconciliation",
+            subject_id=evidence_ref,
+        )
+        self._validate_provider_identity(
+            provider_namespace=provider_namespace,
+            provider_object_id=provider_object_id,
+            canonical_locator=canonical_locator,
+        )
+        with self.conn:
+            current = self.conn.execute(
+                "SELECT * FROM evidence_references WHERE evidence_ref = ?", (evidence_ref,)
+            ).fetchone()
+            if not current:
+                raise NotFoundError("evidence reference not found")
+            if current["provider_namespace"] and current["provider_namespace"] != provider_namespace:
+                raise ConflictError("provider namespace mismatch")
+            if current["provider_object_id"] and current["provider_object_id"] != provider_object_id:
+                raise ConflictError("provider object identity mismatch")
+            self.conn.execute(
+                """
+                UPDATE evidence_references
+                SET provider_namespace = ?, provider_object_id = ?,
+                    canonical_locator = ?, display_name = ?
+                WHERE evidence_ref = ?
+                """,
+                (provider_namespace, provider_object_id, canonical_locator, display_name, evidence_ref),
+            )
+            self._audit(
+                "evidence_reference_access",
+                actor,
+                subject_id=evidence_ref,
+                event_payload={
+                    "action": "provider_identity_reconciliation",
+                    "result": "success",
+                    "reason": reason,
+                },
+            )
+        return dict(
+            self.conn.execute(
+                "SELECT * FROM evidence_references WHERE evidence_ref = ?", (evidence_ref,)
+            ).fetchone()
+        )
+
+    def annotate_locator_history(
+        self,
+        *,
+        locator_history_id: int,
+        annotation_type: str,
+        annotation: str,
+        actor: auth.ActorContext,
+    ) -> dict:
+        self._require_permission(
+            actor,
+            auth.EVIDENCE_REFERENCE_ACCESS,
+            action="attempted_locator_history_annotation",
+            subject_id=str(locator_history_id),
+        )
+        if annotation_type not in VALID_LOCATOR_ANNOTATIONS:
+            raise ValidationError("invalid locator annotation type")
+        with self.conn:
+            existing = self.conn.execute(
+                "SELECT * FROM evidence_locator_history WHERE locator_history_id = ?",
+                (locator_history_id,),
+            ).fetchone()
+            if not existing:
+                raise NotFoundError("locator history event not found")
+            cursor = self.conn.execute(
+                """
+                INSERT INTO evidence_locator_annotations(
+                    locator_history_id, annotation_type, annotation, actor, authority
+                ) VALUES (?, ?, ?, ?, ?)
+                """,
+                (locator_history_id, annotation_type, annotation, actor.actor, actor.authority),
+            )
+            self._audit(
+                "evidence_reference_access",
+                actor,
+                subject_id=str(locator_history_id),
+                event_payload={"action": "locator_history_annotation", "result": "success"},
+            )
+        return dict(
+            self.conn.execute(
+                """
+                SELECT * FROM evidence_locator_annotations
+                WHERE locator_annotation_id = ?
+                """,
+                (cursor.lastrowid,),
             ).fetchone()
         )
 
@@ -730,6 +872,50 @@ class AssetOSRegistry:
             ),
         )
         return assertion_id
+
+    def _validate_provider_identity(
+        self,
+        *,
+        provider_namespace: str | None,
+        provider_object_id: str | None,
+        canonical_locator: str | None,
+    ) -> None:
+        supplied = [provider_namespace, provider_object_id, canonical_locator]
+        if any(value is not None for value in supplied) and not all(supplied):
+            raise ValidationError("provider namespace, object id, and canonical locator must be supplied together")
+        if provider_namespace is None:
+            return
+        if provider_namespace not in VALID_PROVIDER_NAMESPACES:
+            raise ValidationError("invalid provider namespace")
+        if provider_namespace == "google_drive":
+            if not GOOGLE_DRIVE_OBJECT_ID.fullmatch(provider_object_id or ""):
+                raise ValidationError("invalid Google Drive provider object id")
+            expected = f"gdrive://file/{provider_object_id}"
+            if canonical_locator != expected:
+                raise ValidationError("canonical locator does not match provider object id")
+
+    def _require_provider_reconciliation(
+        self,
+        current: sqlite3.Row,
+        *,
+        new_drive_locator: str,
+        provider_namespace: str | None,
+        provider_object_id: str | None,
+    ) -> None:
+        current_namespace = current["provider_namespace"]
+        current_object_id = current["provider_object_id"]
+        if current_namespace or current_object_id:
+            if not provider_namespace or not provider_object_id:
+                raise ValidationError("provider-connected locator repair requires provider identity reconciliation")
+            if provider_namespace != current_namespace or provider_object_id != current_object_id:
+                raise ValidationError("provider identity mismatch for locator repair")
+            self._validate_provider_identity(
+                provider_namespace=provider_namespace,
+                provider_object_id=provider_object_id,
+                canonical_locator=new_drive_locator,
+            )
+        elif provider_namespace or provider_object_id:
+            raise ValidationError("provider identity must be reconciled before provider-connected locator repair")
 
     def _audit(
         self,

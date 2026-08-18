@@ -13,6 +13,7 @@ Current release-packaging status:
 - DEP-INIT-001: technical correction independently verified / release integration in progress / final lifecycle closure pending corrective release publication, clean Windows deployment verification, and applicable evidence-custody closure.
 - DEP-QA-001 through DEP-QA-004: resolved.
 - DEP-QA-005: open / evidence-custody condition.
+- AOS-PROD-001: corrective candidate produced / pending independent QA and separate production-migration authority.
 - QA-ACT-001: open / activation-blocking.
 - QA-ACT-002: open / activation-blocking.
 
@@ -51,6 +52,12 @@ Current release-packaging status:
 | DEP-QA-003 | Resolved | Execution-gate issue resolved during independent installed-artifact QA campaign. |
 | DEP-QA-004 | Resolved | Execution-gate issue resolved during independent installed-artifact QA campaign. |
 | DEP-QA-005 | Open / evidence-custody condition | Evidence-custody condition remains open and does not close DEP-INIT-001 lifecycle by itself. |
+
+## Production Admission Data-Model Findings
+
+| Finding | Prior status | Correction surface | Implementation change | Test evidence | Producer disposition | QA/Command Center status |
+|---|---|---|---|---|---|---|
+| AOS-PROD-001 | Open / canonical evidence locator representation and provider identity data-model gap | `migrations/002_provider_locator_semantics.sql`, `src/assetos_mob/registry.py`, `src/assetos_mob/export.py`, provider-locator tests | Added provider namespace, first-class provider object identity, canonical locator validation, provider reconciliation, no-op repair rejection, locator-history annotation, provider-aware minimum disclosure, and synthetic v0.1.1 migration coverage | `tests/test_provider_locator_semantics.py`, `qa_adversarial_mob_tests.py` | Corrective candidate produced | Pending independent QA; production Registry migration prohibited pending separate authority |
 
 ## Non-Blocking Limitations
 

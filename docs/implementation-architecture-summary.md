@@ -48,6 +48,22 @@ This is a controlled development/test implementation. It creates no production R
 
 Producer regression coverage installs the package into a fresh virtual environment, executes initialization from an isolated runtime directory with no top-level repository `migrations` directory, verifies `schema_migrations` contains `001_mob`, and verifies reference data seeding completed. Independent installed-artifact QA verified correction candidate `82844ce60021033d47439e62cf8c4bc9f100c634` with evidence-custody condition.
 
+## Provider Identity and Canonical Locator Semantics
+
+`AOS-PROD-001` identified that production-connected evidence needed stronger provider identity and canonical locator semantics than the v0.1.1 free-text `drive_locator` field provided.
+
+Corrective candidate `mob-v0.1.2` adds:
+
+- governed provider namespace table with `google_drive`;
+- first-class evidence fields for provider namespace, provider object ID, canonical locator, and display name;
+- canonical Google Drive locator format `gdrive://file/<provider_object_id>`;
+- provider identity reconciliation before provider-connected locator repair;
+- no-op locator repair rejection;
+- locator-history annotation for historical no-op attempts without deleting or rewriting history;
+- minimum-disclosure export suppression for provider namespace, provider object ID, canonical locator, display name, and legacy locator when not authorized.
+
+Production Registry migration remains prohibited until independent QA and separate production-migration authority.
+
 ## Cryptographic Implementation Note
 
 The correction candidate removes OpenSSL CLI passphrase transport. Backup encryption is performed in process through `cryptography 46.x`:

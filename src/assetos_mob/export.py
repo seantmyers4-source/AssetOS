@@ -177,7 +177,8 @@ def _export_evidence(
 ) -> list[dict]:
     rows = conn.execute(
         """
-        SELECT evidence_ref, asset_uuid, evidence_type, drive_locator, original_or_derivative,
+        SELECT evidence_ref, asset_uuid, evidence_type, drive_locator, provider_namespace,
+               provider_object_id, canonical_locator, display_name, original_or_derivative,
                information_class, continuity_state, acceptance_state, completeness_state
         FROM evidence_references
         """
@@ -198,6 +199,10 @@ def _export_evidence(
                 "acceptance_state": row["acceptance_state"],
                 "completeness_state": row["completeness_state"],
                 "drive_locator": row["drive_locator"] if include_locator else "[suppressed]",
+                "provider_namespace": row["provider_namespace"] if include_locator else "[suppressed]",
+                "provider_object_id": row["provider_object_id"] if include_locator else "[suppressed]",
+                "canonical_locator": row["canonical_locator"] if include_locator else "[suppressed]",
+                "display_name": row["display_name"] if include_locator else "[suppressed]",
             }
         )
     return exported

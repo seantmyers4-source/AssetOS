@@ -4,7 +4,7 @@ Control reference: `AOS-HO-00001`
 
 Release representation: **Closed with activation conditions**.
 
-This matrix maps the approved ARIR-013 implementation-measurement requirements into reproducible producer tests and independent QA readback evidence for the controlled non-production MOB v0.1.1 corrective release package. This does not state that production admission or activation testing is complete.
+This matrix maps the approved ARIR-013 implementation-measurement requirements into reproducible producer tests and independent QA readback evidence for the controlled non-production MOB v0.1.2 corrective candidate package. This does not state that production admission, production migration, or activation testing is complete.
 
 | Area | Requirement | Producer evidence |
 |---|---|---|
@@ -32,6 +32,8 @@ This matrix maps the approved ARIR-013 implementation-measurement requirements i
 | Documentation | Explicit original/derivative API and history | `qa_adversarial_mob_tests.py::test_original_derivative_states_are_explicit_and_historical` |
 | Documentation | Continuity and broken locator preservation | `test_evidence_broken_locator_preserves_relationship` |
 | Documentation | Locator repair preserves prior locator and evidence identity | `qa_adversarial_mob_tests.py::test_evidence_locator_repair_preserves_identity_and_history` |
+| Documentation | Provider identity and canonical locator semantics | `tests/test_provider_locator_semantics.py::ProviderLocatorSemanticsTests` |
+| Documentation | v0.1.1 to v0.1.2 synthetic migration preservation | `tests/test_provider_locator_semantics.py::SyntheticV011MigrationTests` |
 | Documentation | Acceptance and completeness states | evidence schema and synthetic fixture coverage |
 | Security | Authorized and denied access | `test_authorization_denial` |
 | Security | Privilege separation | `auth.ActorContext` permissions |
@@ -68,7 +70,8 @@ This matrix maps the approved ARIR-013 implementation-measurement requirements i
 | Finding | Implementation surface | Test method | Expected result | Producer-observed result | Evidence location |
 |---|---|---|---|---|---|
 | DEP-INIT-001 | `assetos_mob.db` migration resolver and packaged `assetos_mob.migrations` resources | `python -m unittest discover -s tests -v` | Clean installed artifact discovers packaged `001_mob.sql`, records migration, seeds reference data, and does not depend on repository top-level `migrations` at runtime | Producer pass; independent installed-artifact QA verified candidate `82844ce60021033d47439e62cf8c4bc9f100c634` with evidence-custody condition | `tests/test_installed_artifact.py` |
+| AOS-PROD-001 | Provider identity fields, canonical locator validation, no-op repair rejection, locator-history annotation, provider-aware export | `python -m unittest discover -s tests -v`; `python qa_adversarial_mob_tests.py -v` | Synthetic v0.1.1 state migrates without recreating Asset/evidence identity; provider ID is first-class; malformed/mismatched locators fail closed; same-filename wrong object is rejected; no-op repairs are rejected; historical no-op rows are annotatable; provider identity survives backup/restore; minimum disclosure suppresses provider data | Pass in producer environment | `tests/test_provider_locator_semantics.py`, `qa_adversarial_mob_tests.py` |
 
 ## Remaining QA Work
 
-Independent QA has verified QA-RR-001 through QA-RR-009 for the controlled non-operational release candidate. DEP-INIT-001 technical correction is independently verified; final lifecycle closure remains pending corrective release publication, clean Windows deployment verification, and applicable evidence-custody closure. Production admission testing remains subject to later activation-readiness controls, including production host hardening and real Google Drive continuity/reconciliation.
+Independent QA has verified QA-RR-001 through QA-RR-009 for the controlled non-operational release candidate. DEP-INIT-001 technical correction is independently verified; final lifecycle closure remains pending corrective release publication, clean Windows deployment verification, and applicable evidence-custody closure. AOS-PROD-001 is a corrective candidate pending independent QA. Production migration, validation, publication, second Asset admission, and activation remain unauthorized.
